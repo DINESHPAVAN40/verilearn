@@ -1,0 +1,60 @@
+from flask import Flask, request, jsonify
+from flask_cors import CORS
+import subprocess
+import os
+import uuid
+
+app = Flask(__name__)
+CORS(app) # Allows the frontend to communicate with this backend
+
+@app.route('/run', methods=['POST'])
+def run_verilog():
+    data = request.json
+    code = data.get('code', '')
+
+    if not code.strip():
+        return jsonify({"output": "Error: No code provided."}), 400
+
+    # Generate unique filenames to prevent conflicts if multiple people use it
+    unique_id = str(uuid.uuid4())
+    v_file = f"temp_{unique_id}.v"
+    vvp_file = f"temp_{unique_id}.vvp"
+
+    try:
+        # 1. Write the Verilog code to a file
+        with open(v_file, "w") as f:
+            f.write(code)
+
+        # 2. Compile the Verilog code using Icarus Verilog
+        compile_process = subprocess.run(
+            ["iverilog", "-o", vvp_file, v_file],
+            capture_output=True,
+            text=True
+        )
+
+        # Check for compilation errors
+        if compile_process.returncode != 0:
+            return jsonify({"output": f"Compilation Error:\n{compile_process.stderr}"})
+
+        # 3. Simulate the compiled code
+        simulate_process = subprocess.run(
+            ["vvp", vvp_file],
+            capture_output=True,
+            text=True
+        )
+
+        # Return the simulation output
+        return jsonify({"output": simulate_process.stdout})
+
+    except Exception as e:
+        return jsonify({"output": f"Server Error: {str(e)}"}), 500
+
+    finally:
+        # 4. Cleanup temporary files
+        if os.path.exists(v_file):
+            os.remove(v_file)
+        if os.path.exists(vvp_file):
+            os.remove(vvp_file)
+
+if __name__ == '__main__':
+    app.run(debug=True, port=5000)

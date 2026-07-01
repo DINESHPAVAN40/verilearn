@@ -1,0 +1,15 @@
+.vscode/
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.pytest_cache/
+*.log
+.env
+.venv/
+venv/
+instance/
+*.one
+*.onetoc2
+*.lnk
+*.url

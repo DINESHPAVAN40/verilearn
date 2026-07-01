@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriLearn - Workspace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+</head>
+<body class="workspace-page">
+    <!-- Header -->
+    <header class="workspace-header">
+        <div class="header-left">
+            <h1 class="logo">VeriLearn</h1>
+            <span class="workspace-title">Practice Workspace</span>
+        </div>
+        <div class="header-right">
+            <span class="user-info">{{ current_user.username }}</span>
+            <a href="/logout" class="btn btn-logout">Logout</a>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="workspace-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-section">
+                <h3>Projects</h3>
+                <button class="btn btn-new-project" id="new-project-btn">+ New Project</button>
+                <div class="projects-list" id="projects-list">
+                    <p class="loading">Loading projects...</p>
+                </div>
+            </div>
+
+            <div class="sidebar-section">
+                <h3>Guides</h3>
+                <button class="guide-item" data-guide="logic-gates">
+                    <span class="icon">⚡</span>
+                    <span>Logic Gates</span>
+                </button>
+                <button class="guide-item" data-guide="flip-flops">
+                    <span class="icon">🔄</span>
+                    <span>Flip-Flops</span>
+                </button>
+                <button class="guide-item" data-guide="fsm">
+                    <span class="icon">🎯</span>
+                    <span>State Machines</span>
+                </button>
+                <button class="guide-item" data-guide="testbench">
+                    <span class="icon">🧪</span>
+                    <span>Testbenches</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Editor Area -->
+        <main class="editor-main">
+            <!-- Editor Top Bar -->
+            <div class="editor-topbar">
+                <div class="project-info">
+                    <input type="text" id="project-title" class="project-title-input" placeholder="Project Title">
+                    <input type="text" id="project-description" class="project-description-input" placeholder="Project Description">
+                </div>
+                <div class="editor-buttons">
+                    <button class="btn btn-secondary" id="save-project-btn">💾 Save Project</button>
+                    <button class="btn btn-danger" id="delete-project-btn">🗑️ Delete</button>
+                </div>
+            </div>
+
+            <!-- Split Editor View -->
+            <div class="editor-split">
+                <!-- Design Code Editor -->
+                <div class="editor-pane">
+                    <div class="editor-header">
+                        <h3>Design Module (.v)</h3>
+                        <span class="editor-hint">Your Verilog module code</span>
+                    </div>
+                    <textarea id="design-code" class="code-editor" placeholder="module my_design(
+    input wire clk,
+    input wire reset,
+    output wire out
+);
+
+// Your design here
+
+endmodule"></textarea>
+                </div>
+
+                <!-- Testbench Code Editor -->
+                <div class="editor-pane">
+                    <div class="editor-header">
+                        <h3>Testbench (.v)</h3>
+                        <span class="editor-hint">Test your module</span>
+                    </div>
+                    <textarea id="testbench-code" class="code-editor" placeholder="`timescale 1ns / 1ps
+
+module testbench;
+    reg clk, reset;
+    wire out;
+    
+    my_design uut (
+        .clk(clk),
+        .reset(reset),
+        .out(out)
+    );
+    
+    initial begin
+        // Your test cases here
+    end
+endmodule"></textarea>
+                </div>
+            </div>
+
+            <!-- Simulation Controls -->
+            <div class="simulation-controls">
+                <button class="btn btn-success" id="simulate-btn">▶️ Simulate</button>
+                <span class="simulation-status" id="simulation-status">Ready</span>
+            </div>
+
+            <!-- Output Console -->
+            <div class="output-console">
+                <div class="console-header">
+                    <h3>Simulation Output</h3>
+                    <button class="btn btn-sm" id="clear-console">Clear</button>
+                </div>
+                <div class="console-body" id="console-output">
+                    <p class="console-welcome">Output will appear here after simulation...</p>
+                </div>
+            </div>
+        </main>
+
+        <!-- Right Sidebar - Live Guide -->
+        <aside class="guide-panel">
+            <div class="guide-header">
+                <h3>Live Guide</h3>
+                <button class="btn-close" id="close-guide">&times;</button>
+            </div>
+            <div class="guide-content" id="guide-content">
+                <p>Select a guide from the left sidebar to get started!</p>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Modal for New/Edit Project -->
+    <div class="modal" id="project-modal">
+        <div class="modal-content">
+            <span class="modal-close">&times;</span>
+            <h2>Create New Project</h2>
+            <form id="project-form">
+                <div class="form-group">
+                    <label>Project Name</label>
+                    <input type="text" id="modal-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="modal-description"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Create</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/workspace.js') }}"></script>
+</body>
+</html>

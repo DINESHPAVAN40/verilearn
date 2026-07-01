@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VeriLearn - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="auth-page">
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-header">
+                <h1 class="logo">VeriLearn</h1>
+                <p>Master Verilog Hardware Description</p>
+            </div>
+
+            <form id="login-form" class="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">Login</button>
+            </form>
+
+            <div class="auth-message" id="message"></div>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="/register">Sign up here</a></p>
+            </div>
+        </div>
+
+        <div class="auth-info">
+            <h2>Welcome to VeriLearn</h2>
+            <p>A modern platform for learning Verilog hardware description language.</p>
+            <div class="features">
+                <div class="feature-item">
+                    <span class="feature-icon">⚡</span>
+                    <h3>Live Compilation</h3>
+                    <p>Compile and simulate your Verilog code in real-time</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">📚</span>
+                    <h3>Interactive Guides</h3>
+                    <p>Learn from guided tutorials and examples</p>
+                </div>
+                <div class="feature-item">
+                    <span class="feature-icon">💾</span>
+                    <h3>Save Projects</h3>
+                    <p>Store and manage your Verilog projects</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('login-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const messageEl = document.getElementById('message');
+
+            try {
+                const response = await fetch('/login', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({username, password})
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    messageEl.textContent = 'Login successful! Redirecting...';
+                    messageEl.className = 'auth-message success';
+                    setTimeout(() => window.location.href = '/workspace', 1000);
+                } else {
+                    messageEl.textContent = data.error || 'Login failed';
+                    messageEl.className = 'auth-message error';
+                }
+            } catch (error) {
+                messageEl.textContent = 'Connection error. Please try again.';
+                messageEl.className = 'auth-message error';
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Verilog Training Hub</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">VeriLearn</div>
+            <ul class="nav-links">
+                <li><a href="#curriculum">Curriculum</a></li>
+                <li><a href="#workspace">Workspace</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <h1>Master Hardware Description</h1>
+            <p>From basic gates to complex embedded systems and FSMs.</p>
+        </section>
+
+        <section id="curriculum" class="curriculum-section">
+            <h2>Training Modules</h2>
+            <div class="module-grid">
+                <div class="card">
+                    <h3>Module 1: Logic Gates</h3>
+                    <p>AND, OR, NOT, XOR. The foundation of digital design.</p>
+                </div>
+                <div class="card">
+                    <h3>Module 2: Sequential Logic</h3>
+                    <p>Flip-flops, latches, and clock synchronization.</p>
+                </div>
+                <div class="card">
+                    <h3>Module 3: FSMs & Sensor Logic</h3>
+                    <p>State machines for timing and external peripheral control.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="workspace" class="workspace-section">
+            <h2>Practice Workspace</h2>
+            <div class="editor-container">
+                <textarea id="verilog-code" placeholder="Write your Verilog module here...
+module and_gate(input a, input b, output y);
+    assign y = a & b;
+endmodule"></textarea>
+                <div class="output-console">
+                    <div class="console-header">Simulation Output</div>
+                    <div id="console-body" class="console-body">Awaiting compilation...</div>
+                </div>
+            </div>
+            <button id="run-btn" class="run-button">Simulate Code</button>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
