@@ -1,0 +1,23 @@
+theme: jekyll-theme-cayman
+title: VeriLearn
+tagline: Master Verilog Hardware Description Language - Interactive Learning Platform
+description: Learn Verilog HDL with real-time compilation, simulation, and interactive guides
+url: https://DINESHPAVAN40.github.io/verilearn/
+baseurl: /verilearn
+show_downloads: false
+
+# Jekyll configuration
+markdown: kramdown
+highlighter: rouge
+plugins:
+  - jekyll-seo-tag
+  - jekyll-feed
+
+# Collections for organizing content
+collections:
+  tutorials:
+    output: true
+    permalink: /tutorials/:path/
+  guides:
+    output: true
+    permalink: /guides/:path/
