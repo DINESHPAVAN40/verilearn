@@ -1,11 +1,7 @@
 {
-  "name": "verilog-project-temp",
-  "version": "0.0.0",
-  "private": true,
+  "name": "verilearn",
+  "version": "1.0.0",
   "scripts": {
-    "build": "echo no build script defined && exit 0"
-  },
-  "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "build": "echo 'Static site, no build needed'"
   }
 }
