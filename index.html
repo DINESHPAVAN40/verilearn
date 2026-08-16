@@ -1,0 +1,258 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>VeriLearn — Learn Verilog in the Browser</title>
+
+  <!-- Simple styling -->
+  <style>
+    :root{
+      --bg:#f7f8fb; --card:#ffffff; --accent:#0b5cff; --muted:#6b7280;
+      --maxw:980px;
+    }
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      margin:0; background:var(--bg); color:#111827;
+      -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+    }
+    header{background:linear-gradient(90deg, #ffffff, #f1f5f9); border-bottom:1px solid #e6eef8;}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px;}
+    h1{margin:0;font-size:1.5rem;}
+    p.lead{color:var(--muted); margin:8px 0 20px;}
+    .grid{display:grid; grid-template-columns: 1fr 320px; gap:20px;}
+    .card{background:var(--card); border-radius:8px; padding:18px; box-shadow:0 1px 2px rgba(15,23,42,0.04);}
+    .examples .example{margin-bottom:14px; border-radius:6px; overflow:hidden; border:1px solid #eef2ff;}
+    pre{margin:0; padding:12px; background:#0b1220; color:#e6eef8; overflow:auto; font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", monospace; font-size:13px;}
+    button{background:var(--accent); color:white; border:none; padding:8px 10px; border-radius:6px; cursor:pointer;}
+    .muted{color:var(--muted); font-size:0.95rem;}
+    .controls{display:flex; gap:8px; align-items:center; margin-top:8px;}
+    .small{font-size:0.85rem; padding:6px 8px;}
+    footer{padding:18px; text-align:center; color:var(--muted); font-size:0.9rem;}
+    /* Responsive */
+    @media (max-width:900px){ .grid{grid-template-columns:1fr; } .wrap{padding:18px;} }
+  </style>
+
+  <!-- PrismJS basic for syntax highlighting (CDN) -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css" rel="stylesheet" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"></script>
+  <!-- Use C-like highlighting for Verilog -->
+  <script>Prism.languages.verilog = Prism.languages.clike;</script>
+</head>
+<body>
+  <header>
+    <div class="wrap">
+      <h1>VeriLearn</h1>
+      <p class="lead">A simple, browser-first learning platform for basic Verilog HDL lessons and examples.</p>
+    </div>
+  </header>
+
+  <main class="wrap" style="padding-top:20px;padding-bottom:20px;">
+    <div class="grid">
+      <section class="card">
+        <h2>Getting started (in the browser)</h2>
+        <p class="muted">Open the examples below, copy them, or download the files to run locally with a simulator like Icarus Verilog.</p>
+
+        <h3 style="margin-top:18px;">How to use</h3>
+        <ol>
+          <li>Click an example to view the Verilog source in the pane on the right.</li>
+          <li>Use "Download" to save a .v file to your machine.</li>
+          <li>To run simulations locally, install a Verilog simulator (e.g., Icarus Verilog) and run from terminal.</li>
+        </ol>
+
+        <h3 style="margin-top:12px;">Host on GitHub Pages</h3>
+        <p class="muted">Push this file to your repository root or to a <code>/docs</code> folder, then enable GitHub Pages in repository Settings → Pages → source: main branch / docs folder (or root). The site will be served as a static website.</p>
+
+        <div style="margin-top:12px;">
+          <button id="downloadAll" class="small">Download all examples (.zip)</button>
+          <span style="margin-left:8px;" id="zipHint" class="muted"></span>
+        </div>
+      </section>
+
+      <aside class="card">
+        <h3>Examples</h3>
+        <div class="examples" id="examplesList">
+          <!-- Examples inserted by script -->
+        </div>
+      </aside>
+    </div>
+
+    <section style="margin-top:18px;" class="card">
+      <h3>Editor / Viewer</h3>
+      <p class="muted">View the selected example below. You can copy, download, or open in a new tab.</p>
+      <div id="editorControls" class="controls" style="justify-content:flex-end;">
+        <button id="openNew" class="small">Open in new tab</button>
+        <button id="downloadBtn" class="small">Download .v</button>
+        <button id="copyBtn" class="small" style="background:#10b981">Copy</button>
+      </div>
+      <div style="margin-top:8px; border-radius:8px; overflow:hidden; border:1px solid #e6eef8;">
+        <pre><code id="codeBlock" class="language-verilog" spellcheck="false">// Select an example from the right to see code here.</code></pre>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Maintainer: DINESHPAVAN40 — static browser site ready. Want in-browser simulation? Ask and I'll add options.
+  </footer>
+
+  <script>
+    // Example Verilog samples (extend as you like)
+    const examples = [
+      {
+        name: "01_simple_and.v",
+        title: "Simple 2-input AND gate",
+        content: `// 01_simple_and.v
+module and2 (input a, input b, output y);
+  assign y = a & b;
+endmodule
+
+// Testbench (save as tb_01.v)
+module tb;
+  reg a, b;
+  wire y;
+  and2 U(.a(a), .b(b), .y(y));
+  initial begin
+    $display("a b | y");
+    a=0; b=0; #5 $display("%b %b | %b", a, b, y);
+    a=0; b=1; #5 $display("%b %b | %b", a, b, y);
+    a=1; b=0; #5 $display("%b %b | %b", a, b, y);
+    a=1; b=1; #5 $display("%b %b | %b", a, b, y);
+    $finish;
+  end
+endmodule`
+      },
+      {
+        name: "02_dff.v",
+        title: "D flip-flop (positive-edge)",
+        content: `// 02_dff.v
+module dff (input clk, input d, output reg q);
+  always @(posedge clk) begin
+    q <= d;
+  end
+endmodule
+
+// Simple testbench
+module tb;
+  reg clk = 0;
+  reg d;
+  wire q;
+  dff U(.clk(clk), .d(d), .q(q));
+  always #5 clk = ~clk;
+  initial begin
+    d = 0;
+    #7 d = 1;
+    #10 d = 0;
+    #10 $finish;
+  end
+endmodule`
+      },
+      {
+        name: "03_counter.v",
+        title: "4-bit up counter",
+        content: `// 03_counter.v
+module upcounter(input clk, input rst, output reg [3:0] q);
+  always @(posedge clk or posedge rst) begin
+    if (rst) q <= 0;
+    else q <= q + 1;
+  end
+endmodule`
+      }
+    ];
+
+    const examplesList = document.getElementById('examplesList');
+    const codeBlock = document.getElementById('codeBlock');
+    let current = examples[0];
+
+    function makeExampleItem(ex, idx){
+      const el = document.createElement('div');
+      el.className = 'example card';
+      el.style.padding = '10px';
+      el.innerHTML = `
+        <div style="display:flex;justify-content:space-between;align-items:center;">
+          <div>
+            <strong style="font-size:0.95rem">${ex.title}</strong><br/>
+            <span class="muted" style="font-size:0.85rem">${ex.name}</span>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <button data-idx="${idx}" class="small openBtn">Open</button>
+            <button data-idx="${idx}" class="small dlBtn" style="background:#111827">Download</button>
+          </div>
+        </div>
+      `;
+      return el;
+    }
+
+    function renderList(){
+      examples.forEach((ex,i) => {
+        const node = makeExampleItem(ex,i);
+        examplesList.appendChild(node);
+      });
+      // attach events
+      document.querySelectorAll('.openBtn').forEach(b => b.addEventListener('click', e=>{
+        const idx = +e.target.dataset.idx;
+        setCurrent(idx);
+      }));
+      document.querySelectorAll('.dlBtn').forEach(b => b.addEventListener('click', e=>{
+        const idx = +e.target.dataset.idx;
+        downloadFile(examples[idx].name, examples[idx].content);
+      }));
+    }
+
+    function setCurrent(idx){
+      current = examples[idx];
+      updateCodeBlock();
+    }
+
+    function updateCodeBlock(){
+      codeBlock.textContent = current.content;
+      Prism.highlightElement(codeBlock);
+    }
+
+    function downloadFile(filename, text){
+      const blob = new Blob([text], { type: 'text/plain' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = filename;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 5000);
+    }
+
+    // Controls
+    document.getElementById('downloadBtn').addEventListener('click', ()=>{
+      downloadFile(current.name, current.content);
+    });
+    document.getElementById('openNew').addEventListener('click', ()=>{
+      const w = window.open('', '_blank');
+      w.document.write('<pre style="white-space:pre-wrap;font-family:monospace;padding:16px;">' + escapeHtml(current.content) + '</pre>');
+      w.document.title = current.name;
+    });
+    document.getElementById('copyBtn').addEventListener('click', async ()=>{
+      try{
+        await navigator.clipboard.writeText(current.content);
+        alert('Copied to clipboard');
+      }catch(e){
+        alert('Copy failed — you can select and copy manually.');
+      }
+    });
+
+    // Download all examples as a single .zip is not implemented here (would need a zip library).
+    // Instead, provide a simple instruction.
+    document.getElementById('downloadAll').addEventListener('click', ()=>{
+      alert('To download all examples at once: clone the repo or download each file individually using the Download buttons. If you want a ZIP download, I can add it (requires a small JS zip library).');
+    });
+
+    // Utility
+    function escapeHtml(unsafe) {
+      return unsafe.replace(/[&<>\"]/g, function(m) {
+        return {'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[m];
+      });
+    }
+
+    // Initialize
+    renderList();
+    setCurrent(0);
+  </script>
+</body>
+</html>
