@@ -1,0 +1,26 @@
+{
+  "$schema": "https://json.schemastore.org/package.json",
+  "name": "verilearn",
+  "version": "2.0.0",
+  "description": "A comprehensive Verilog HDL learning platform with interactive workspace",
+  "keywords": [
+    "verilog",
+    "hdl",
+    "learning",
+    "education",
+    "digital-design",
+    "coding",
+    "workspace",
+    "editor"
+  ],
+  "author": "Dinesh Pavan Bonam",
+  "license": "MIT",
+  "homepage": "https://verilearn-nine.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DINESHPAVAN40/verilearn.git"
+  },
+  "bugs": {
+    "url": "https://github.com/DINESHPAVAN40/verilearn/issues"
+  }
+}
