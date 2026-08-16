@@ -11,8 +11,9 @@ import shutil
 
 # Initialize Flask app
 app = Flask(__name__)
-app.config['SECRET_KEY'] = 'verilearn-secret-key-2024'
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///verilog_hub.db'
+# Use environment variables for secrets/config in production
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'verilearn-dev-secret')
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', 'sqlite:///verilog_hub.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize extensions
@@ -305,4 +306,8 @@ def internal_error(error):
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()
-    app.run(debug=True, host='127.0.0.1', port=5000)
+    # Use env vars for host/port in production
+    host = os.environ.get('FLASK_HOST', '127.0.0.1')
+    port = int(os.environ.get('PORT', 5000))
+    debug = os.environ.get('FLASK_DEBUG', 'False').lower() in ('1', 'true', 'yes')
+    app.run(debug=debug, host=host, port=port)
