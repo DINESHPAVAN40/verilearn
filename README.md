@@ -1,125 +1,216 @@
-# VeriLearn - Verilog AI Learning & Simulation Platform
+# VeriLearn - Modern Verilog Learning Platform
 
-A modern, web-based platform for learning Verilog hardware description language with real-time compilation and simulation.
+A comprehensive, user-friendly platform for learning Verilog HDL with interactive workspace, guides, and real-time compilation.
 
-## Features
+## ✨ Features
 
-✨ **Core Features:**
-- 🔐 User Authentication (Login/Signup)
-- 💾 Project Management (Save, Load, Delete)
-- 🎯 Split-Pane Editor (Design & Testbench)
-- ⚡ Real-time Verilog Compilation
-- 🧪 Live Simulation Output
-- 📚 Interactive Learning Guides
-- 🎨 Modern, Professional UI/UX
+- 🔐 **User Authentication** - Secure login with Firebase
+- 💻 **Interactive Workspace** - Code editor with Monaco Editor
+- 🧪 **Live Compilation** - Real-time Verilog simulation
+- 📚 **Learning Guides** - Complete tutorials and examples
+- 💾 **Project Management** - Save and resume work
+- 🎨 **Modern UI** - Clean, responsive design
+- 🚀 **Cloud Ready** - Deploy to Vercel instantly
+- ⚡ **Fast Performance** - Next.js optimization
 
-## Project Structure
+## 🛠️ Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| **Framework** | Next.js 14 + React 18 |
+| **Language** | TypeScript |
+| **Styling** | Tailwind CSS |
+| **Database** | Firebase Firestore |
+| **Authentication** | Firebase Auth |
+| **Editor** | Monaco Editor |
+| **State** | Zustand |
+| **Deployment** | Vercel |
+
+## 📋 Project Structure
 
 ```
-verilog/
-├── app.py                    # Flask backend server
-├── requirements.txt          # Python dependencies
-├── verilog_hub.db           # SQLite database (auto-created)
-├── templates/               # HTML templates
-│   ├── login.html
-│   ├── register.html
-│   └── workspace.html
-└── static/                  # Static files
-    ├── css/
-    │   └── style.css
-    └── js/
-        └── workspace.js
+verilearn/
+├── app/
+│   ├── layout.tsx              # Root layout
+│   ├── page.tsx                # Homepage
+│   ├── dashboard/              # User dashboard
+│   ├── workspace/              # Code editor
+│   ├── guides/                 # Learning guides
+│   └── api/                    # API routes
+├── components/
+│   ├── auth/                   # Auth components
+│   ├── editor/                 # Editor component
+│   ├── navbar/                 # Navigation
+│   └── ui/                     # UI components
+├── lib/
+│   ├── firebase.ts             # Firebase config
+│   ├── store.ts                # Zustand store
+│   └── utils.ts                # Utilities
+└── public/                     # Static files
 ```
 
-## Prerequisites
+## 🚀 Quick Start
 
-- **Python 3.8+**
-- **Icarus Verilog (iverilog)** - Installed and in PATH
-- **pip** (Python package manager)
+### Prerequisites
+- Node.js 18+
+- npm or yarn
+- Firebase account (free tier)
 
-### Installing Icarus Verilog
+### Installation
 
-**Windows:**
+1. **Clone Repository**
 ```bash
-# Using Chocolatey (if installed)
-choco install iverilog
-
-# Or download from:
-# http://bleyer.org/icarus/
+git clone https://github.com/DINESHPAVAN40/verilearn.git
+cd verilearn
 ```
 
-**Linux (Ubuntu/Debian):**
+2. **Install Dependencies**
 ```bash
-sudo apt-get install iverilog
+npm install
 ```
 
-**macOS:**
+3. **Setup Firebase**
 ```bash
-brew install icarus-verilog
+# Copy environment template
+cp .env.example .env.local
+
+# Edit .env.local with your Firebase credentials
+# Get credentials from: Firebase Console → Project Settings → General
 ```
 
-## Installation & Setup
+Environment variables needed:
+```
+NEXT_PUBLIC_FIREBASE_API_KEY=
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=
+NEXT_PUBLIC_FIREBASE_APP_ID=
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-### 1. Clone/Download the Project
+4. **Run Development Server**
 ```bash
-cd verilog
+npm run dev
 ```
 
-### 2. Create Virtual Environment (Optional but Recommended)
+Visit `http://localhost:3000`
+
+## 📚 Firebase Setup Guide
+
+### 1. Create Firebase Project
+1. Go to [Firebase Console](https://console.firebase.google.com/)
+2. Click "Create a project"
+3. Name it "verilearn"
+4. Skip analytics (optional)
+
+### 2. Enable Authentication
+```
+Firebase Console → Authentication → Get started
+→ Email/Password → Enable
+```
+
+### 3. Create Firestore Database
+```
+Firebase Console → Firestore Database → Create database
+→ Start in test mode
+→ Choose region close to you
+```
+
+### 4. Setup Security Rules
+```
+Firestore → Rules → Update with:
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId} {
+      allow read, write: if request.auth.uid == userId;
+    }
+    match /projects/{projectId} {
+      allow read, write: if request.auth.uid == resource.data.userId;
+      allow create: if request.auth.uid == request.resource.data.userId;
+    }
+  }
+}
+```
+
+### 5. Get Credentials
+```
+Project Settings → General → Web app config
+Copy all values to .env.local
+```
+
+## 🎯 Usage Guide
+
+### Create Account
+1. Click "Sign Up"
+2. Enter email and password
+3. Verify email
+4. Start learning!
+
+### Use Workspace
+1. Dashboard → Workspace
+2. Select or create project
+3. Write Verilog code (design + testbench)
+4. Click "Simulate" to run
+5. Save project
+
+### Learn from Guides
+1. Navigate to "Guides"
+2. Choose topic (Logic Gates, Flip-Flops, FSM, Testbenches)
+3. Read explanation
+4. Try examples
+
+## 🌐 Deployment to Vercel
+
+### Deploy in 5 Minutes
+
+1. **Push to GitHub**
 ```bash
-python -m venv venv
-# Activate it
-# Windows:
-venv\Scripts\activate
-# Linux/Mac:
-source venv/bin/activate
+git add .
+git commit -m "Ready for deployment"
+git push origin feature/complete-workspace
 ```
 
-### 3. Install Dependencies
-```bash
-pip install -r requirements.txt
-```
+2. **Merge PR**
+- Open PR on GitHub
+- Click "Merge pull request"
 
-### 4. Run the Application
-```bash
-python app.py
-```
+3. **Deploy on Vercel**
+- Go to [Vercel](https://vercel.com)
+- Click "New Project"
+- Select your GitHub repo
+- Add environment variables (from .env.local)
+- Click "Deploy"
 
-The server will start on `http://localhost:5000`
+✅ Your app is live!
 
-## Usage
+For detailed deployment steps, see [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)
 
-### 1. **Register/Login**
-   - Visit http://localhost:5000
-   - Create a new account or login with existing credentials
+## 📖 Learning Path
 
-### 2. **Create a Project**
-   - Click "+ New Project" button
-   - Enter project name and description
+### Beginner (Week 1)
+- Day 1-2: Logic Gates (AND, OR, NOT, XOR)
+- Day 3-4: Combinational Logic
+- Day 5: Mini project
 
-### 3. **Write Verilog Code**
-   - **Left Pane:** Write your design module (.v file)
-   - **Right Pane:** Write your testbench module
-   - See the **Live Guides** on the right for examples
+### Intermediate (Week 2)
+- Day 1-2: Flip-Flops & Latches
+- Day 3-4: Sequential Logic
+- Day 5: Counter project
 
-### 4. **Simulate**
-   - Click "▶️ Simulate" button
-   - View compilation status and output below
+### Advanced (Week 3)
+- Day 1-2: State Machines (FSM)
+- Day 3-4: Complex Design
+- Day 5: Capstone project
 
-### 5. **Save Projects**
-   - Click "💾 Save Project" to store your work
-   - Projects are saved to the database and linked to your account
+## 💡 Example: AND Gate
 
-## Example: Simple AND Gate
-
-**Design Module:**
+**Design:**
 ```verilog
-module and_gate(
-    input a,
-    input b,
-    output y
-);
-    assign y = a & b;
+module and_gate(input a, input b, output y);
+  assign y = a & b;
 endmodule
 ```
 
@@ -128,93 +219,89 @@ endmodule
 `timescale 1ns / 1ps
 
 module testbench;
-    reg a, b;
-    wire y;
-    
-    and_gate uut(.a(a), .b(b), .y(y));
-    
-    initial begin
-        $monitor("Time=%t | a=%b b=%b y=%b", $time, a, b, y);
-        
-        a = 0; b = 0; #10;
-        a = 0; b = 1; #10;
-        a = 1; b = 0; #10;
-        a = 1; b = 1; #10;
-        
-        $finish;
-    end
+  reg a, b;
+  wire y;
+  
+  and_gate uut(.a(a), .b(b), .y(y));
+  
+  initial begin
+    $monitor("a=%b b=%b y=%b", a, b, y);
+    a=0; b=0; #10;
+    a=0; b=1; #10;
+    a=1; b=0; #10;
+    a=1; b=1; #10;
+    $finish;
+  end
 endmodule
 ```
 
-## API Endpoints
+## 🔐 Security
 
-### Authentication
-- `POST /register` - Register new user
-- `POST /login` - Login user
-- `GET /logout` - Logout user
+**Implemented:**
+- ✅ Firebase authentication
+- ✅ Firestore security rules
+- ✅ User data isolation
+- ✅ HTTPS/SSL on Vercel
 
-### Projects
-- `GET /api/projects` - List all user projects
-- `POST /api/project/save` - Save/update project
-- `GET /api/project/<id>` - Get project details
-- `DELETE /api/project/<id>` - Delete project
+**Best Practices:**
+- Never commit `.env.local`
+- Use environment variables for secrets
+- Review Firestore rules regularly
+- Enable 2FA on Firebase account
 
-### Compilation
-- `POST /api/compile` - Compile and simulate Verilog code
+## 🐛 Troubleshooting
 
-## Learning Guides
+| Issue | Solution |
+|-------|----------|
+| Firebase connection fails | Check `.env.local` credentials |
+| Port 3000 in use | Use `npm run dev -- -p 3001` |
+| Build errors | Run `npm install` and `npm run build` |
+| Cannot save projects | Check Firestore rules and quotas |
 
-The platform includes 4 built-in guides:
+## 📝 Environment Variables
 
-1. **Logic Gates** - AND, OR, NOT, XOR operations
-2. **Flip-Flops** - Sequential logic and memory elements
-3. **State Machines** - FSM design patterns
-4. **Testbenches** - Writing effective test cases
+Create `.env.local`:
+```bash
+# Firebase
+NEXT_PUBLIC_FIREBASE_API_KEY=your_key
+NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=your_domain
+NEXT_PUBLIC_FIREBASE_PROJECT_ID=your_project_id
+NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=your_bucket
+NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=your_sender_id
+NEXT_PUBLIC_FIREBASE_APP_ID=your_app_id
 
-Access guides by clicking on them in the left sidebar.
-
-## Troubleshooting
-
-### iverilog Not Found
-Make sure Icarus Verilog is installed and added to your system PATH.
-
-### Database Errors
-Delete `verilog_hub.db` to reset the database on next run.
-
-### Port 5000 Already in Use
-Change the port in `app.py`:
-```python
-app.run(debug=True, host='127.0.0.1', port=5001)  # Use 5001 instead
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
 ```
 
-## Security Notes
+## 🤝 Contributing
 
-⚠️ **For Production:**
-- Change `SECRET_KEY` in app.py
-- Use proper database (PostgreSQL, MySQL)
-- Enable HTTPS
-- Implement rate limiting
-- Add input validation
-- Use environment variables for config
+1. Fork repository
+2. Create feature branch
+3. Commit changes
+4. Push to branch
+5. Open Pull Request
 
-## Future Enhancements
+## 📄 License
 
-- 📊 Code statistics and complexity metrics
-- 🔄 Collaborative editing
-- 📤 Export simulation waveforms
-- 🎓 Assignment submission system
-- 💬 Student/mentor chat
-- 🏆 Achievement badges
-- 📈 Progress tracking dashboard
+MIT License - See LICENSE file
 
-## License
+## 💬 Support
 
-MIT License - Feel free to use and modify!
+- **Issues**: [GitHub Issues](https://github.com/DINESHPAVAN40/verilearn/issues)
+- **Email**: support@verilearn.dev
+- **Docs**: Check `/guides` in app
 
-## Support
+## 🎓 Learning Outcomes
 
-For issues or questions, contact: support@verilearn.com
+After completing VeriLearn, you'll be able to:
+- Write Verilog HDL code
+- Design digital circuits
+- Create and debug testbenches
+- Implement state machines
+- Simulate hardware designs
+- Understand digital logic
 
 ---
 
-**Happy Learning!** 🚀 Master Verilog with VeriLearn
+**Happy Learning!** 🚀 Start mastering Verilog today!
